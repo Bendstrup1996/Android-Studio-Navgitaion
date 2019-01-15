@@ -1,0 +1,273 @@
+activity_main layout
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:background="@color/colorAccent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+        </android.support.v7.widget.Toolbar>
+
+
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <!-- The main content that loads the fragments -->
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--setting the corodinator layout inorder to pull the bottom navigation view down to the bottom-->
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">  <!--The bottom navigation -->
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="?android:attr/windowBackground"
+            app:itemIconTint="@drawable/item_selected"
+            app:itemTextColor="@drawable/item_selected"
+            app:menu="@menu/bottom_navigation_menu" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <!-- The navigation drawer that comes from the left -->
+    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/colorAccent"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu" />
+</android.support.v4.widget.DrawerLayout>
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------
+MainActivity Java Code
+
+
+package com.bendstrup1996.myapplication;
+
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+
+    private static final String Tag = "MainActivity";
+
+    DrawerLayout drawerLayout;
+    Toolbar toolbar;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+
+    BottomNavigationView bottomNavigationView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        setUpToolbar();
+
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+
+    }
+
+    private void setUpToolbar()
+    {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout, toolbar,R.string.app_name, R.string.app_name);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+    }
+
+
+    Home homeFragment = new Home();
+    News newsFragment = new News();
+    Games gamesFragment = new Games();
+    List listFragment = new List();
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.navigation_news:
+                getFragmentManager().beginTransaction().replace(R.id.container, newsFragment).commit();
+                return true;
+
+            case R.id.navigation_home:
+                getFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+                return true;
+
+            case R.id.navigation_games:
+                getFragmentManager().beginTransaction().replace(R.id.container, gamesFragment).commit();
+                return true;
+
+            case R.id.navigation_list:
+                getFragmentManager().beginTransaction().replace(R.id.container, listFragment).commit();
+                return true;
+        }
+
+        return false;
+    }
+}
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Style.xml
+
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/material_white</item>
+    </style>
+
+    <style name="Splash" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    </style>
+
+</resources>
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+AndroidManifest.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bendstrup1996.myapplication"
+    android:installLocation="preferExternal">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/title_activity_splash"
+            android:theme="@style/Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+Strings.xml
+
+
+
+<resources>
+    <string name="app_name">Bendstrup1996</string>
+    <string name="title_home">Home</string>
+    <string name="title_news">News</string>
+    <string name="title_games">Games</string>
+    <string name="title_list">List</string>
+    <string name="title_more">More</string>
+
+
+    <string name="title_Fragment_home">Fragment Home</string>
+    <string name="title_Fragment_news">Fragment News</string>
+    <string name="title_Fragment_games">Fragment Games</string>
+    <string name="title_Fragment_list">Fragment List</string>
+    <string name="title_Fragment_more">Fragment More</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_splash">Bendstrup1996</string>
+    <string name="title_Bendstrup1996">Bendstrup1996</string>
+    <string name="image_Splash">Splash</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_Message">Message</string>
+    <string name="title_Chat">Chat</string>
+    <string name="title_Profile">Profile</string>
+    <string name="title_Settings">Settings</string>
+    <string name="title_Communicate">Communicate</string>
+    <string name="title_Share">Share</string>
+    <string name="title_Send">Send</string>
+    <string name="image_Description">Description</string>
+    <string name="text_Email">Oliverbendstrup9696@gmail.com</string>
+    <string name="text_Profile_Name">Bendstrup1996</string>
+</resources>
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
