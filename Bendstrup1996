@@ -19,21 +19,20 @@ activity_main layout
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:background="@color/colorAccent"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
         </android.support.v7.widget.Toolbar>
 
 
-
+        <!-- for fragments in NavigationView -->
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <!-- The main content that loads the fragments -->
+    <!-- The main content that loads the fragments form BottomNavigationView -->
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -46,9 +45,9 @@ activity_main layout
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_gravity="bottom"
-            android:background="?android:attr/windowBackground"
+            android:background="@color/colorPrimaryDark"
             app:itemIconTint="@drawable/item_selected"
             app:itemTextColor="@drawable/item_selected"
             app:menu="@menu/bottom_navigation_menu" />
@@ -59,14 +58,14 @@ activity_main layout
     <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="240dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:background="@color/colorAccent"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu" />
 </android.support.v4.widget.DrawerLayout>
-
 
 
 
@@ -118,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout, toolbar,R.string.app_name, R.string.app_name);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout, toolbar,R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
